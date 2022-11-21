@@ -1,0 +1,38 @@
+mode: Mainline
+commit-message-incrementing: MergeMessageOnly
+
+assembly-versioning-format: '{Major}.{Minor}.{Patch}'
+assembly-informational-format: '{Major}.{Minor}.{Patch}.{BranchName ?? unknown}-{CommitsSinceVersionSourcePadded ?? 0}'
+commit-date-format: yyyyMMddTHHmmss
+
+branches:
+  # each entry here is a "branch type" ... it does not have to be the name of the branch although it
+  # will most often match.  feature-type branches will be 'feature/*' and so on
+  main:
+    # increment which part Major, Minor, Patch or None
+    increment: Patch
+    is-mainline: true
+  pull-request:
+    tag: pr
+    increment: Minor
+  feature:
+    regex: feature/
+    tag: useBranchName
+    increment: Patch
+    source-branches: ['main', 'feature']
+    track-merge-target: true
+  hotfix:
+    regex: ^(bug|hot)?fix/
+    tag: useBranchName
+    increment: Patch
+    source-branches: ['main', 'feature']
+  release:
+    regex: release[/-]\d+\.\d+\.\d+
+    tag: useBranchName
+    increment: Inherit
+    is-release-branch: true
+  test:
+    regex: test/
+    tag: useBranchName
+    increment: Patch
+    source-branches: ['main']
